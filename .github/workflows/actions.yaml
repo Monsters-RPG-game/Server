@@ -48,7 +48,8 @@ jobs:
             "port": 5003,
             "myAddress": "http://localhost",
             "corsOrigin": ["http://localhost"],
-            "trustProxy": false
+            "trustProxy": false,
+            "repository": "memory"
           }' > config/devConfig.json
           cp config/devConfig.json config/prodConfig.json
           cp config/devConfig.json config/testConfig.json
