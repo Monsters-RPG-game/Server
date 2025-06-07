@@ -20,7 +20,7 @@ export default class Middleware {
    * @param app
    */
   generateRateLimiter(app: express.Express): void {
-    app.use(limitRate);
+    app.use(limitRate());
   }
 
   /**

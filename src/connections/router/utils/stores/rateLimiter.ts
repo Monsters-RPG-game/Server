@@ -55,7 +55,9 @@ export default class RateLimiterFactory {
   static create(): Store {
     switch (process.env.NODE_ENV) {
       case 'production':
-        return new RateLimiterStore(new SampleStore()); // This is a place for production store. Replacae it later with proper store
+        return new RateLimiterStore(new SampleStore()); // This is a place for production store. Replace it later with proper store
+      case 'development':
+        return new RateLimiterStore(new SampleStore());
       default:
         Log.warn('Rate limiter', 'No env set. Defaulting to in memory rate limiter store');
         return new RateLimiterStore(new SampleStore());

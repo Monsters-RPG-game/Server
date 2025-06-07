@@ -44,7 +44,7 @@ export default class ConfigLoader {
       return config as types.IConfig;
     } catch (err) {
       Log.error('Config loader', 'Got error while reading config files', (err as Error).message);
-      throw new InvalidConfigError();
+      throw new InvalidConfigError((err as Error).message);
     }
   }
 
@@ -64,8 +64,23 @@ export default class ConfigLoader {
     const configKeys = Object.values(EConfigKeys);
 
     configKeys.forEach((k) => {
-      if (config[k] === undefined || config[k] === null)
-        throw new Error(`Config is incorrect. ${k} is missing in config or is set to undefined`);
+      if (k.includes('.')) {
+        // Spli key for nested values and validate
+        const split = k.split('.');
+        if (
+          split.reduce<Record<string, unknown>>(
+            (acc, key) => acc?.[key as keyof types.IConfig] as Record<string, unknown>,
+            config,
+          ) === undefined ||
+          config[k as keyof types.IConfig] === null
+        ) {
+          throw new Error(`Config is incorrect. ${k} is missing in config or is set to undefined`);
+        }
+      } else {
+        if (config[k as keyof types.IConfig] === undefined || config[k as keyof types.IConfig] === null) {
+          throw new Error(`Config is incorrect. ${k} is missing in config or is set to undefined`);
+        }
+      }
     });
   }
 
@@ -92,6 +107,21 @@ export default class ConfigLoader {
           break;
         case EConfigKeys.TRUST_PROXY:
           config[key] = Boolean(target);
+          break;
+        case EConfigKeys.POSTGRES_PORT:
+          config.postgres!.port = Number(target);
+          break;
+        case EConfigKeys.POSTGRES_PASSWORD:
+          config.postgres!.password = target;
+          break;
+        case EConfigKeys.POSTGRES_USER:
+          config.postgres!.user = target;
+          break;
+        case EConfigKeys.POSTGRES_DB:
+          config.postgres!.db = target;
+          break;
+        case EConfigKeys.POSTGRES_HOST:
+          config.postgres!.host = target;
           break;
         default:
           config[key] = target;
