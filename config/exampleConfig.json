@@ -3,5 +3,12 @@
   "myAddress": "http://localhost",
   "corsOrigin": ["http://localhost"],
   "trustProxy": false,
-  "repository": "memory"
+  "repository": "memory",
+  "postgres": {
+    "user": "postgresUser",
+    "password": "postgresPassword",
+    "host": "host",
+    "db": "db",
+    "port": 5432
+  }
 }

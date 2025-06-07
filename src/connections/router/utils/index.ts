@@ -7,6 +7,7 @@ import State from '../../../tools/state.js';
 import type * as enums from '../../../enums/index.js';
 import type * as types from '../../../types/index.js';
 import type express from 'express';
+import type { RateLimitRequestHandler } from 'express-rate-limit';
 
 /**
  * Rate limiter for routes access.
@@ -15,8 +16,10 @@ import type express from 'express';
  * @param _res Express.Response.
  * @param next Express.Next.
  */
-export const limitRate =
-  process.env.NODE_ENV === 'test'
+export const limitRate = ():
+  | RateLimitRequestHandler
+  | ((_req: express.Request, _res: express.Response, next: express.NextFunction) => void) => {
+  return process.env.NODE_ENV === 'test'
     ? (_req: express.Request, _res: express.Response, next: express.NextFunction): void => {
         next();
       }
@@ -27,6 +30,7 @@ export const limitRate =
         message: { data: 'Too many requests from this IP, please try again in an 1 min' },
         validate: { trustProxy: ConfigLoader.getConfig().trustProxy },
       });
+};
 
 export const getController = <T extends enums.EControllers, N extends types.IControllerActions>(
   target: T,

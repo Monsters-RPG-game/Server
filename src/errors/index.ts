@@ -378,8 +378,8 @@ export class NoRepositoryControllerSpecified extends FullError {
  *           example: "Config file is missing, cannot be read or is malformed"
  */
 export class InvalidConfigError extends FullError {
-  constructor() {
-    super('Config file is missing, cannot be read or is malformed');
+  constructor(message?: string) {
+    super(message ?? 'Config file is missing, cannot be read or is malformed');
     this.name = 'InvalidConfigError';
     this.code = '013';
     this.status = 500;

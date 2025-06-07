@@ -1,4 +1,5 @@
 import Log from 'simpl-loggar';
+import Postgres from './connections/postgres/index.js';
 import Router from './connections/router/index.js';
 import Bootstrap from './tools/bootstrap.js';
 import Liveness from './tools/liveness.js';
@@ -16,6 +17,7 @@ class App {
     this._liveness = val;
   }
 
+  @Log.decorateTime('App initialized')
   init(): void {
     try {
       this.handleInit();
@@ -33,16 +35,18 @@ class App {
     State.kill();
   }
 
-  @Log.decorateTime('App initialized')
   private handleInit(): void {
     const controllers = new Bootstrap();
     const router = new Router();
+    const postgres = new Postgres();
 
     State.controllers = controllers;
     State.router = router;
+    State.postgres = postgres;
 
     controllers.init();
     router.init();
+    postgres.init();
 
     Log.log('Server', 'Server started');
 

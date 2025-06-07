@@ -42,7 +42,7 @@ export default class AppRouter {
     const options: swaggerJsdoc.Options = {
       definition: {
         openapi: '3.0.1',
-        description: 'This is a REST API for node.js template',
+        description: 'This is a REST API for Monsters game server',
         servers: [
           {
             url: 'http://localhost',
@@ -50,7 +50,7 @@ export default class AppRouter {
           },
         ],
         info: {
-          title: 'Node js template',
+          title: 'Monsters - game server',
           version: jsonPackage.version as string,
         },
       },

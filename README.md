@@ -1,23 +1,14 @@
-# Node.js Dependency injection template
+# Monsters - mobile game server
 
 > [!NOTE]
->This project is a simple node.js template built with typescript. Its extremely simple and includes only the most necessary packages to make your work faster. This template uses ESM. Keep this in mind while working on this project. For some reason, people do not know what esm is.
+> This project is a server for mobile games written in node.js
 
 TLDR:
-0. [Key packages](#0-key-packages)
 1. [How to install](#1-how-to-install)
 2. [How to build](#2-how-to-build)
 3. [Useful information](#3-useful-information)
 4. [Docs](#4-docs)
 5. [Examples](#5-examples)
-
-## 0. Key packages
-
-- Express - server
-- Helmet - security
-- Swagger - docs
-
-## 1. How to start
 
 ## 1. How to start
 
@@ -161,6 +152,13 @@ Each config includes few elements:
   "session": {
     "secret": "secret",
     "secured": true
+  },
+  "postgres": {
+    "user": "postgresUser",
+    "password": "postgresPassword",
+    "host": "host",
+    "db": "db",
+    "port": 5432
   }
 }
 ```
@@ -172,6 +170,8 @@ MyAddress is address, that will be used to host this application.
 CorsOrigin is list of website that will use this application. If you do not care about it, set ["*"]
 
 Session is config for express session. 
+
+Postgres is postgres config
 
 ## 4. Docs
 
@@ -188,7 +188,7 @@ This application utilizes `NODE_ENV` env, which is set in package.json. `start` 
 
 This project is using swagger docs for api documentation. You can access them by route [http://localhost:{port}/docs](http://localhost:8080/docs)
 
-Instead of adding json/yaml configs, this template is built on swagger-jsdoc package, which utilizes jsdoc comments. If you prefer to remove comments from compiled code in tsconfig, make sure to rewrite docs to other tool.
+Instead of adding json/yaml configs, this project is built on swagger-jsdoc package, which utilizes jsdoc comments. If you prefer to remove comments from compiled code in tsconfig, make sure to rewrite docs to other tool.
 
 ### 4.3 Logging
 

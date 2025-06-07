@@ -1,5 +1,6 @@
 import Log from 'simpl-loggar';
 import type Bootstrap from './bootstrap.js';
+import type Postgres from '../connections/postgres/index.js';
 import type Router from '../connections/router/index.js';
 import type { IState } from '../types/index.js';
 import { EventEmitter } from 'events';
@@ -8,6 +9,7 @@ class State extends EventEmitter implements IState {
   private _alive: boolean = false;
   private _controllers: Bootstrap | null = null;
   private _router: Router | null = null;
+  private _postgres: Postgres | null = null;
 
   get controllers(): Bootstrap {
     return this._controllers!;
@@ -15,6 +17,14 @@ class State extends EventEmitter implements IState {
 
   set controllers(val: Bootstrap) {
     this._controllers = val;
+  }
+
+  get postgres(): Postgres {
+    return this._postgres!;
+  }
+
+  set postgres(val: Postgres) {
+    this._postgres = val;
   }
 
   get router(): Router {
@@ -37,6 +47,7 @@ class State extends EventEmitter implements IState {
   @Log.decorateLog('State', 'App closed')
   kill(): void {
     this.router.close();
+    this.postgres.close();
 
     this.alive = false;
   }

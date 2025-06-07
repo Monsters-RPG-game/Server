@@ -49,7 +49,14 @@ jobs:
             "myAddress": "http://localhost",
             "corsOrigin": ["http://localhost"],
             "trustProxy": false,
-            "repository": "memory"
+            "repository": "memory",
+            "postgres": {
+              "user": "postgresUser",
+              "password": "postgresPassword",
+              "host": "host",
+              "db": "db",
+              "port": 5432
+            }
           }' > config/devConfig.json
           cp config/devConfig.json config/prodConfig.json
           cp config/devConfig.json config/testConfig.json
