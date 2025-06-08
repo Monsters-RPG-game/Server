@@ -11,4 +11,7 @@ export interface IConfig {
     db: string;
     port: number;
   };
+  diagnostics: {
+    reqTime: boolean;
+  };
 }

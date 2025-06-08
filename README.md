@@ -159,6 +159,9 @@ Each config includes few elements:
     "host": "host",
     "db": "db",
     "port": 5432
+  },
+  "diagnostics": {
+    "reqTime": false
   }
 }
 ```
@@ -172,6 +175,20 @@ CorsOrigin is list of website that will use this application. If you do not care
 Session is config for express session. 
 
 Postgres is postgres config
+
+Diagnostics are diagnostic options, which will help you analyze and debug your operations. It supports few options, like:
+
+- ReqTime - count time for each request. Each time will be logged and will look like this
+
+```json
+[09:50:08] Log.TIME: 67fea6a3-6e4c-4467-98db-07d511b446a5 Time passed: 0.01s
+[09:50:08] Log.TIME: 67fea6a3-6e4c-4467-98db-07d511b446a5 {
+  "path": "/graphql",
+  "method": "POST"
+}
+```
+
+Where UUID v4 is random uuid created for each req. This should also have user's id take from login token ( this is a #TODO )
 
 ## 4. Docs
 

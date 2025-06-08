@@ -1,5 +1,7 @@
 import Log from 'simpl-loggar';
 import MemoryUserRepository from './logic/memory.js';
+import PostgresUserRepository from './logic/postgres.js';
+import { ETableNames } from '../../../enums/db.js';
 import { NoRepositoryControllerSpecified } from '../../../errors/index.js';
 import ConfigLoader from '../../../tools/config/index.js';
 import type { IUserRepository } from './types.js';
@@ -21,11 +23,15 @@ class UserRepository implements IUserRepository {
     return this.repository.get(id);
   }
 
-  async update(id: string, data: Partial<IUserEntity>): Promise<void> {
+  async getAll(page: number): Promise<IUserEntity[]> {
+    return this.repository.getAll(page);
+  }
+
+  async update(id: string, data: Partial<IUserEntity>): Promise<IUserEntity> {
     return this.repository.update(id, data);
   }
 
-  async add(data: IAddUserDto): Promise<string> {
+  async add(data: IAddUserDto): Promise<IUserEntity> {
     return this.repository.add(data);
   }
 }
@@ -41,6 +47,9 @@ export default class UserFacade {
     switch (repositoryTarget) {
       case 'memory':
         UserFacade.instance = new UserRepository(new MemoryUserRepository());
+        return UserFacade.instance;
+      case 'postgres':
+        UserFacade.instance = new UserRepository(new PostgresUserRepository(ETableNames.Users));
         return UserFacade.instance;
       default:
         Log.error('No repository controller specified. Please specify type of controller in config files');

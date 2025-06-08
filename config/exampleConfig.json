@@ -10,5 +10,8 @@
     "host": "host",
     "db": "db",
     "port": 5432
+  },
+  "diagnostics": {
+    "reqTime": false
   }
 }

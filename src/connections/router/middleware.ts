@@ -31,7 +31,7 @@ export default class Middleware {
     this.initGenericMiddleware(app);
     this.initSecurity(app);
     this.logRequests(app);
-    this.measureTime(app);
+    if (ConfigLoader.getConfig().diagnostics.reqTime) this.measureTime(app);
   }
 
   /**
@@ -39,6 +39,8 @@ export default class Middleware {
    * @param app Express app.
    */
   private measureTime(app: express.Express): void {
+    Log.log('Middleware', 'Running req time diagnostics');
+
     app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
       const reqId = randomUUID();
       Log.time(reqId);
@@ -148,27 +150,27 @@ export default class Middleware {
 
         if (error.message.includes('is not valid JSON')) {
           Log.error('Middleware', 'Received req is not of json type', error.message, error.stack);
-          const { message, name, status } = new errors.IncorrectDataType();
-          res.status(status).json({ message, name });
+          const { message, name, extensions } = new errors.IncorrectDataType();
+          res.status(extensions.status).json({ message, name });
           return;
         }
 
         if (error.name === 'SyntaxError') {
           Log.error('Middleware', 'Generic err', error.message, error.stack);
-          const { message, code, name, status } = new errors.InternalError();
-          res.status(status).json({ message, code, name });
+          const { message, name, extensions } = new errors.InternalError();
+          res.status(extensions.status).json({ message, code: extensions.code, name });
           return;
         }
 
-        if (error.code !== undefined) {
-          const { message, code, name, status } = error;
-          res.status(status).json({ message, code, name });
+        if (error?.extensions?.code !== undefined) {
+          const { message, name, extensions } = error;
+          res.status(extensions.status).json({ message, code: extensions.code, name });
           return;
         }
 
         Log.error('Middleware', 'Generic err', error.message, error.stack);
-        const { message, code, name, status } = new errors.InternalError();
-        res.status(status).json({ message, code, name });
+        const { message, name, extensions } = new errors.InternalError();
+        res.status(extensions.status).json({ message, code: extensions.code, name });
       },
     );
   }

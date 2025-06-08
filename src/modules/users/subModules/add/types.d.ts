@@ -1,3 +1,3 @@
 export interface IAddUserDto {
-  name: string;
+  login: string;
 }

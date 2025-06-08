@@ -26,7 +26,6 @@ export default class Mysql {
       },
       migrations: {
         tableName: 'knex_migrations',
-        directory: '../../migrations/actions',
       },
       pool: {
         min: 5,
