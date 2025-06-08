@@ -11,6 +11,6 @@ export default class UserPostgresRepository
   async getByLogin(login: string): Promise<IUserEntity | null> {
     const data = await State.postgres.getClient()<IUserEntity>(this.target).where('login', login);
 
-    return data[0] as IUserEntity | null;
+    return data.length > 0 ? data[0]! : null;
   }
 }

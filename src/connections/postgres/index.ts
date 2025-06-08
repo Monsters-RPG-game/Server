@@ -3,13 +3,13 @@ import Log from 'simpl-loggar';
 import ConfigLoader from '../../tools/config/index.js';
 
 export default class Mysql {
-  private _knex: knex.Knex | undefined;
+  protected _knex: knex.Knex | undefined;
 
-  private get knex(): knex.Knex {
+  protected get knex(): knex.Knex {
     return this._knex as knex.Knex;
   }
 
-  private set knex(value: knex.Knex) {
+  protected set knex(value: knex.Knex) {
     this._knex = value;
   }
 

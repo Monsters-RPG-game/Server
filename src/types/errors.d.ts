@@ -6,3 +6,8 @@ export interface IFullError extends GraphQLError {
     status: number;
   };
 }
+
+export interface IFullRawError extends Error {
+  code: string;
+  status: number;
+}

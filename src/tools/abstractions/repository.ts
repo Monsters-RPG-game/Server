@@ -41,9 +41,11 @@ export abstract class RepositoryPostgresFactory<T extends Exclude<EControllers, 
   }
 
   async getAll(_page: number): Promise<types.IRepositoryGetAllData[T]> {
-    return State.postgres
+    const data = await State.postgres
       .getClient()<types.IRepositoryGetAllData[T]>(this.target)
       .select<types.IRepositoryGetAllData[T]>('*');
+
+    return data;
   }
 }
 

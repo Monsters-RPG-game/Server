@@ -1,4 +1,4 @@
 export interface IGetUserDto {
-  name?: string;
+  login?: string;
   id?: string;
 }
