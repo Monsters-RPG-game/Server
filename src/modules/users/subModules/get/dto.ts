@@ -20,20 +20,20 @@ import type { IGetUserDto } from './types.js';
  *          type: string
  */
 export default class GetUserDto implements IGetUserDto {
-  name?: string;
+  login?: string;
   id?: string;
 
   constructor(data: IGetUserDto) {
-    this.name = data?.name;
+    this.login = data?.login;
     this.id = data?.id;
 
     this.validate();
   }
 
   validate(): void {
-    if (!this.name && !this.id) throw new MissingArgError('name');
+    if (!this.login && !this.id) throw new MissingArgError('login');
 
-    if (!this.id) new Validation(this.name, 'name').isDefined().isString().hasMinLength(1);
-    if (!this.name) new Validation(this.id, 'id').isDefined().isString().hasMinLength(1);
+    if (!this.id) new Validation(this.login, 'login').isDefined().isString().hasMinLength(1);
+    if (!this.login) new Validation(this.id, 'id').isDefined().isString().hasMinLength(1);
   }
 }

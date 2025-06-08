@@ -14,7 +14,7 @@ export default class GetUserController implements IAbstractSubController<IUserEn
     let user: IUserEntity | null = null;
 
     if (data.id) user = await this.repo.get(data.id);
-    if (data.name) user = await this.repo.getByLogin(data.name);
+    if (data.login) user = await this.repo.getByLogin(data.login);
 
     return user;
   }

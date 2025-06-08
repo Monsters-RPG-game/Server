@@ -26,7 +26,11 @@ const config: JestConfigWithTsJest = {
         tsconfig: "tsconfig.test.json",
       },
     ],
-  }
+  },
+  collectCoverage: true,
+  coverageDirectory: './coverage/combined',
+  coverageReporters: ['json', 'lcov', 'text'],
+  coverageProvider: 'v8',
 };
 
 export default config;

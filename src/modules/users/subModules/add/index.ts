@@ -16,8 +16,6 @@ export default class AddUserController implements IAbstractSubController<IUserEn
 
     if (exist) throw new errors.UserAlreadyRegistered();
 
-    const userId = await this.repo.add(data);
-
-    return this.repo.get(userId.id) as Promise<IUserEntity>;
+    return this.repo.add(data);
   }
 }
