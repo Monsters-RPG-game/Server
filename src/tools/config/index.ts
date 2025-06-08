@@ -3,6 +3,7 @@ import { EConfigEnvs, EConfigKeys } from './enums.js';
 import { InvalidConfigError } from '../../errors/index.js';
 import type * as types from '../../types/index.js';
 import fs from 'fs';
+import path from 'path';
 
 export default class ConfigLoader {
   private static _config: types.IConfig | undefined;
@@ -24,15 +25,26 @@ export default class ConfigLoader {
     if (ConfigLoader.config) return ConfigLoader.config;
 
     try {
-      let config: Partial<types.IConfig> = {};
+      let config: Partial<types.IConfig> = {
+        diagnostics: {
+          reqTime: false,
+        },
+        postgres: {
+          user: '',
+          password: '',
+          host: '',
+          db: '',
+          port: 0,
+        },
+      };
 
       switch (process.env.NODE_ENV) {
         case 'development':
         case 'test':
-          config = JSON.parse(fs.readFileSync('./config/devConfig.json').toString()) as types.IConfig;
+          config = this.readConfig('devConfig.json');
           break;
         case 'production':
-          config = JSON.parse(fs.readFileSync('./config/prodConfig.json').toString()) as types.IConfig;
+          config = this.readConfig('prodConfig.json');
           break;
         default:
           throw new Error('No config files');
@@ -53,6 +65,31 @@ export default class ConfigLoader {
    */
   static validateConfig(): void {
     ConfigLoader.getConfig();
+  }
+
+  /**
+   * Prepare config path.
+   * @param target
+   * @param fallback
+   */
+  private static getPath(target: string, fallback: boolean = false): string {
+    const basePath = import.meta.url.split('/');
+    const dots = ['..', '..', '..', '..', 'config'];
+    if (fallback) dots.unshift('..');
+
+    return path.join(basePath.splice(2, basePath.length - 1).join('/'), ...dots, target);
+  }
+
+  /**
+   * Read config file.
+   * @param target
+   */
+  private static readConfig(target: string): types.IConfig {
+    try {
+      return JSON.parse(fs.readFileSync(ConfigLoader.getPath(target)).toString()) as types.IConfig;
+    } catch (_err) {
+      return JSON.parse(fs.readFileSync(ConfigLoader.getPath(target, true)).toString()) as types.IConfig;
+    }
   }
 
   /**
@@ -107,6 +144,9 @@ export default class ConfigLoader {
           break;
         case EConfigKeys.TRUST_PROXY:
           config[key] = Boolean(target);
+          break;
+        case EConfigKeys.DIAGNOSTICS_REQ_TIME:
+          config.diagnostics!.reqTime = Boolean(target);
           break;
         case EConfigKeys.POSTGRES_PORT:
           config.postgres!.port = Number(target);

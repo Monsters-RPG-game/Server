@@ -10,11 +10,21 @@ export interface IRepositoryGetData {
   [enums.EControllers.Users]: IUserEntity | null;
 }
 
-export interface IRepositoryUpdate {
+export interface IRepositoryGetAllData {
+  [enums.EControllers.Users]: IUserEntity[];
+}
+
+export interface IRepositoryUpdateData {
   [enums.EControllers.Users]: Partial<IUserEntity>;
 }
 
+export interface IRepositoryGetFull {
+  [enums.EControllers.Users]: IUserEntity;
+}
+
 export interface IAbstractRepository<Z extends Exclude<enums.EControllers, enums.EControllers.Health>> {
-  add(data: unknown): Promise<string>;
+  add(data: unknown): Promise<IRepositoryGetFull[Z]>;
   get(data: unknown): Promise<IRepositoryGetData[Z]>;
+  getAll(page: number): Promise<IRepositoryGetData[Z][]>;
+  update(id: string, data: IRepositoryUpdateData[Z]): Promise<IRepositoryGetFull[Z]>;
 }

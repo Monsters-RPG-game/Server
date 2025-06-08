@@ -1,5 +1,7 @@
+import { createHandler } from 'graphql-http/lib/use/express';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import graphSchemas from '../graph/index.js';
 import initHealthRoutes from './services/health/index.js';
 import initUserRoutes from './services/user/index.js';
 import { FourOhFour } from '../../errors/index.js';
@@ -18,19 +20,26 @@ export default class AppRouter {
     return this._router;
   }
 
-  initRoutes(): void {
+  initRoutes(app: express.Router): void {
+    app.use(
+      '/graphql',
+      createHandler({
+        schema: graphSchemas,
+      }),
+    );
+
     initUserRoutes();
     initHealthRoutes();
   }
 
   initFourOhFour(app: express.Express): void {
     app.all(/(.*)/, (_req, res) => {
-      const { status, code, message, name } = new FourOhFour();
+      const { message, name, extensions } = new FourOhFour();
 
-      res.status(status).send({
+      res.status(extensions.status).send({
         error: {
           message,
-          code,
+          code: extensions.code,
           name,
         },
       });

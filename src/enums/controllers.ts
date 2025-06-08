@@ -1,6 +1,8 @@
 export enum EUserActions {
+  GetAll = 'getAllUsers',
   Get = 'getUser',
   Add = 'registerUser',
+  Update = 'updateUser',
 }
 
 export enum EHealthActions {

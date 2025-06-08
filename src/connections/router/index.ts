@@ -79,7 +79,7 @@ export default class Router {
    * Init basic routes.
    */
   private initRouter(): void {
-    this.router.initRoutes();
+    this.router.initRoutes(this.app);
   }
 
   /**

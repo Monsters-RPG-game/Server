@@ -2,7 +2,6 @@ import { EControllers, EHealthActions } from '../../../../../enums/controllers.j
 import handleErr from '../../../../../errors/handler.js';
 import Routes from '../../../builder/router.js';
 import getController from '../../../utils/controllers.js';
-import type * as types from '../../../../../types/index.js';
 import type express from 'express';
 
 export default class HealthRouter {
@@ -26,7 +25,7 @@ export default class HealthRouter {
       const data = await controller.execute();
       res.status(200).send({ data });
     } catch (err) {
-      handleErr(err as types.IFullError, res);
+      handleErr(err as Error, res);
     }
   }
 }
