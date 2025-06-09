@@ -51,7 +51,7 @@
     "@types/cookie-parser": "1.4.8",
     "@types/cors": "2.8.18",
     "@types/express": "5.0.2",
-    "@types/node": "22.15.29",
+    "@types/node": "22.15.30",
     "@types/pg": "^8.15.4",
     "@types/supertest": "6.0.3",
     "@types/swagger-jsdoc": "6.0.4",
