@@ -12,6 +12,7 @@
     "port": 5432
   },
   "diagnostics": {
-    "reqTime": false
+    "reqTime": false,
+    "logRequests": false
   }
 }

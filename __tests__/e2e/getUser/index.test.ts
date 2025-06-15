@@ -1,9 +1,10 @@
-import { beforeEach, jest, beforeAll, describe, expect, it } from '@jest/globals';
+import { afterEach, beforeEach, beforeAll, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest'
 import State from '../../../src/tools/state.js'
 import { Express } from 'express'
 import { IUserEntity } from '../../../src/modules/users/entity.js';
-import type { IFakeKnex } from '../../utils/fakes/postgres.js'
+import knex from 'knex'
+import Tester from '../../utils/index.js'
 import { ETableNames } from '../../../src/enums/db.js';
 
 interface IGetUsersResponse {
@@ -14,20 +15,21 @@ interface IGetUsersResponse {
 
 describe('Get user', () => {
   let app: Express | null = null
-  let postgres: IFakeKnex | null = null
+  let postgres: knex.Knex.QueryBuilder | null = null
+  let tester: Tester | null = null
 
   beforeAll(() => {
     app = State.router.app
-    // @ts-expect-error Ignored in tests
-    postgres = State.postgres.getClient()(ETableNames.Users) as IFakeKnex
+    postgres = State.postgres.getClient()(ETableNames.Users)
+    tester = new Tester(postgres)
   })
 
-  beforeEach(() => {
-    jest.resetAllMocks()
+  afterEach(async () => {
+    await tester!.cleanUp()
+  })
 
-    State.postgres.init()
-    // @ts-expect-error Ignored in tests
-    postgres = State.postgres.getClient()(ETableNames.Users) as IFakeKnex
+  beforeEach(async () => {
+    await tester!.cleanUp()
   })
 
   describe('Should pass', () => {
@@ -44,7 +46,7 @@ describe('Get user', () => {
     });
 
     it(`Get full user by login`, async () => {
-      postgres!.where.mockReturnValueOnce([{ login: 'userName', id: 2 }])
+      await tester!.createFakeUser({ login: 'userName', id: 2 })
       const reqBody = { query: "{ user ( login: \"userName\" ) { id login } }"}
 
       const res = (await supertest(app!)
@@ -58,7 +60,7 @@ describe('Get user', () => {
     });
 
     it(`Get user's id by login`, async () => {
-      postgres!.where.mockReturnValueOnce([{ login: 'userName', id: 2 }])
+      await tester!.createFakeUser({ login: 'userName', id: 2 })
       const reqBody = { query: "{ user ( login: \"userName\" ) { id } }"}
 
       const res = (await supertest(app!)
@@ -72,7 +74,7 @@ describe('Get user', () => {
     });
 
     it(`Get user's login by login`, async () => {
-      postgres!.where.mockReturnValueOnce([{ login: 'userName', id: 2 }])
+      await tester!.createFakeUser({ login: 'userName', id: 2 })
       const reqBody = { query: "{ user ( login: \"userName\" ) { login } }"}
 
       const res = (await supertest(app!)
@@ -86,7 +88,7 @@ describe('Get user', () => {
     });
 
     it(`Get user's id by id`, async () => {
-      postgres!.where.mockReturnValueOnce([{ login: 'userName', id: 2 }])
+      await tester!.createFakeUser({ login: 'userName', id: 2 })
       const reqBody = { query: "{ user ( id: \"2\" ) { id } }"}
 
       const res = (await supertest(app!)
@@ -100,7 +102,7 @@ describe('Get user', () => {
     });
 
     it(`Get user's login by id`, async () => {
-      postgres!.where.mockReturnValueOnce([{ login: 'userName', id: 2 }])
+      await tester!.createFakeUser({ login: 'userName', id: 2 })
       const reqBody = { query: "{ user ( id: \"2\" ) { login } }"}
 
       const res = (await supertest(app!)

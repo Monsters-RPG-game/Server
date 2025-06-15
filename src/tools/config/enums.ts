@@ -10,6 +10,7 @@ export enum EConfigKeys {
   POSTGRES_DB = 'postgres.db',
   POSTGRES_PORT = 'postgres.port',
   DIAGNOSTICS_REQ_TIME = 'diagnostics.reqTime',
+  DIAGNOSTICS_LOG_REQUESTS = 'diagnostics.logRequests',
 }
 
 export enum EConfigEnvs {
@@ -24,4 +25,5 @@ export enum EConfigEnvs {
   POSTGRES_DB = 'POSTGRES_DB',
   POSTGRES_PORT = 'POSTGRES_PORT',
   DIAGNOSTICS_REQ_TIME = 'DIAGNOSTICS_REQ_TIME',
+  DIAGNOSTICS_LOG_REQUESTS = 'DIAGNOSTICS_LOG_REQUESTS',
 }

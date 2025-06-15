@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/bin/sh
+
+echo "Migrating data"
+
+npm run migrate:latest
 
 echo "Starting service"
 

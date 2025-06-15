@@ -13,5 +13,6 @@ export interface IConfig {
   };
   diagnostics: {
     reqTime: boolean;
+    logRequests: boolean;
   };
 }

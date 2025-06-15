@@ -30,8 +30,11 @@ export default class Middleware {
   generateMiddleware(app: express.Express): void {
     this.initGenericMiddleware(app);
     this.initSecurity(app);
-    this.logRequests(app);
-    if (ConfigLoader.getConfig().diagnostics.reqTime) this.measureTime(app);
+
+    const diag = ConfigLoader.getConfig().diagnostics;
+
+    if (diag.logRequests) this.logRequests(app);
+    if (diag.reqTime) this.measureTime(app);
   }
 
   /**

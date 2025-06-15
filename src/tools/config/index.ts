@@ -28,6 +28,7 @@ export default class ConfigLoader {
       let config: Partial<types.IConfig> = {
         diagnostics: {
           reqTime: false,
+          logRequests: false,
         },
         postgres: {
           user: '',
@@ -40,13 +41,16 @@ export default class ConfigLoader {
 
       switch (process.env.NODE_ENV) {
         case 'development':
-        case 'test':
           config = this.readConfig('devConfig.json');
           break;
         case 'production':
           config = this.readConfig('prodConfig.json');
           break;
+        case 'test':
+          config = this.readConfig('testConfig.json');
+          break;
         default:
+          Log.error('Config loader', 'No env provided');
           throw new Error('No config files');
       }
 
@@ -147,6 +151,9 @@ export default class ConfigLoader {
           break;
         case EConfigKeys.DIAGNOSTICS_REQ_TIME:
           config.diagnostics!.reqTime = Boolean(target);
+          break;
+        case EConfigKeys.DIAGNOSTICS_LOG_REQUESTS:
+          config.diagnostics!.logRequests = Boolean(target);
           break;
         case EConfigKeys.POSTGRES_PORT:
           config.postgres!.port = Number(target);

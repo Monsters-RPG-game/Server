@@ -9,7 +9,7 @@ export default class UserMemoryRepository
 {
   async getByLogin(_data: string): Promise<IUserEntity | null> {
     return new Promise((resolve) => {
-      resolve({ login: '', id: '' });
+      resolve({ login: '', id: 0 });
     });
   }
 }

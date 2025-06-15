@@ -4,9 +4,13 @@ import Connections from './connections.js'
 const connections = new Connections()
 
 beforeAll(async () => {
-  connections.connect()
+  await connections.cleanup()
+
+  await connections.connect()
 })
 
-afterAll(() => {
-  connections.close()
+afterAll(async () => {
+  await connections.close()
 });
+
+export { connections }

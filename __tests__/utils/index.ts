@@ -1,3 +1,5 @@
+import Tester from './tester/index.js'
+
 /**
  * Generate random name, with selected length characters. Default length is 12.
  * @param length Length of random string.
@@ -11,3 +13,5 @@ export const generateRandomName = (length: number = 12): string => {
   }
   return name;
 };
+
+export default Tester
