@@ -40,6 +40,7 @@ Each config includes few elements:
   },
   "diagnostics": {
     "reqTime": false
+    "logRequests": false
   }
 }
 ```
@@ -57,6 +58,7 @@ Postgres is postgres config
 Diagnostics are diagnostic options, which will help you analyze and debug your operations. It supports few options, like:
 
 - ReqTime - count time for each request. Each time will be logged and will look like this
+- LogRequests - log every request when it comes. Currently there is no filtering done for fields, so you can end up logging user's credentials. Later, filtering options will be added
 
 ```json
 [09:50:08] Log.TIME: 67fea6a3-6e4c-4467-98db-07d511b446a5 Time passed: 0.01s

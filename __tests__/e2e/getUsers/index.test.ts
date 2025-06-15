@@ -1,10 +1,11 @@
-import { beforeEach, jest, beforeAll, describe, expect, it } from '@jest/globals';
+import { afterEach, beforeEach, beforeAll, describe, expect, it } from '@jest/globals';
 import supertest from 'supertest'
 import State from '../../../src/tools/state.js'
 import { Express } from 'express'
 import { IUserEntity } from '../../../src/modules/users/entity.js';
-import type { IFakeKnex } from '../../utils/fakes/postgres.js'
+import knex from 'knex'
 import { ETableNames } from '../../../src/enums/db.js';
+import Tester from '../../utils/tester/index.js'
 
 interface IGetAllUsersResponse {
   data: {
@@ -14,25 +15,25 @@ interface IGetAllUsersResponse {
 
 describe('Get all users', () => {
   let app: Express | null = null
-  let postgres: IFakeKnex | null = null
+  let postgres: knex.Knex.QueryBuilder | null = null
+  let tester: Tester | null = null
 
   beforeAll(() => {
     app = State.router.app
-    // @ts-expect-error Ignored in tests
-    postgres = State.postgres.getClient()(ETableNames.Users) as IFakeKnex
+    postgres = State.postgres.getClient()(ETableNames.Users)
+    tester = new Tester(postgres)
   })
 
-  beforeEach(() => {
-    jest.resetAllMocks()
+  afterEach(async () => {
+    await tester!.cleanUp()
+  })
 
-    State.postgres.init()
-    // @ts-expect-error Ignored in tests
-    postgres = State.postgres.getClient()(ETableNames.Users) as IFakeKnex
+  beforeEach(async () => {
+    await tester!.cleanUp()
   })
 
   describe('Should pass', () => {
     it(`Get users - no users`, async () => {
-      postgres!.select.mockReturnValueOnce([])
       const reqBody = { query: "{ users { id login } }"}
 
       const res = (await supertest(app!)
@@ -45,7 +46,7 @@ describe('Get all users', () => {
     });
 
     it(`Get users - 1 user in db`, async () => {
-      postgres!.select.mockReturnValueOnce([{ id: 2, login: 'bread'}])
+      await tester?.createFakeUser({ login: 'bread', id: 2 })
       const reqBody = { query: "{ users { id login } }"}
 
       const res = (await supertest(app!)

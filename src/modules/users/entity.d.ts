@@ -1,4 +1,4 @@
 export interface IUserEntity {
-  id: string;
+  id: number;
   login: string;
 }

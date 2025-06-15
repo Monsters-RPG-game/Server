@@ -49,13 +49,17 @@ jobs:
             "myAddress": "http://localhost",
             "corsOrigin": ["http://localhost"],
             "trustProxy": false,
-            "repository": "memory",
+            "repository": "postgres",
             "postgres": {
               "user": "postgresUser",
-              "password": "postgresPassword",
-              "host": "host",
-              "db": "db",
+              "password": "postgresPass",
+              "host": "postgres",
+              "db": "monsters_test",
               "port": 5432
+            },
+            "diagnostics": {
+              "reqTime": false,
+              "logRequests": false
             }
           }' > config/devConfig.json
           cp config/devConfig.json config/prodConfig.json
@@ -73,6 +77,21 @@ jobs:
 
     container:
       image: node:22
+
+    services:
+      postgres:
+        image: postgres:12
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: postgresUser
+          POSTGRES_PASSWORD: postgresPass
+          POSTGRES_DB: monsters_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - name: Checkout code

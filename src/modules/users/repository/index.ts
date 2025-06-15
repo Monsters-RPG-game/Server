@@ -46,13 +46,18 @@ export default class UserFacade {
 
     switch (repositoryTarget) {
       case 'memory':
+        Log.debug('Controller', 'Creating in-memory database');
         UserFacade.instance = new UserRepository(new MemoryUserRepository());
         return UserFacade.instance;
       case 'postgres':
+        Log.debug('Controller', 'Creating postgres database');
         UserFacade.instance = new UserRepository(new PostgresUserRepository(ETableNames.Users));
         return UserFacade.instance;
       default:
-        Log.error('No repository controller specified. Please specify type of controller in config files');
+        Log.error(
+          'Controller',
+          'No repository controller specified. Please specify type of controller in config files',
+        );
         throw new NoRepositoryControllerSpecified();
     }
   }

@@ -41,7 +41,7 @@ export default class Mysql {
   @Log.decorateLog('Knex', 'Connection closed')
   close(): void {
     if (this.knex) {
-      this.knex.destroy().catch(() => {
+      this.knex?.destroy()?.catch(() => {
         // Ignored
       });
     }
