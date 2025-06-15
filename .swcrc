@@ -1,0 +1,36 @@
+{
+  "$schema": "https://swc.rs/schema.json",
+  "isModule": true,
+  "jsc": {
+    "externalHelpers": false,
+    "keepClassNames": true,
+    "loose": true,
+    "parser": {
+      "decorators": true,
+      "decoratorsBeforeExport": true,
+      "dynamicImport": true,
+      "exportDefaultFrom": true,
+      "exportNamespaceFrom": true,
+      "functionBind": true,
+      "importMeta": true,
+      "privateMethod": true,
+      "syntax": "typescript",
+      "tsx": false,
+      "topLevelAwait": false
+    },
+    "target": "es2022",
+    "transform": {
+      "decoratorMetadata": false,
+      "decoratorVersion" : "2022-03",
+      "legacyDecorator": false,
+      "useDefineForClassFields": true,
+      "verbatimModuleSyntax": true
+    },
+  }
+  "module": {
+    "strict": true,
+    "type": "nodenext",
+  }
+  "minify": false,
+  "sourceMaps": false
+}
